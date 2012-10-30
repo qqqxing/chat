@@ -25,7 +25,8 @@ if(isset($_COOKIE['lastindex']) && $_COOKIE['lastindex'] != ""){
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>chat</title>
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-1.8.2.js"></script>
 
 <script type="text/javascript">
 
@@ -34,6 +35,27 @@ var lastindex = <?php echo $lastindex?>;
 
 var loading = false;
 
+var newmsg = false;
+var show_count = 0;
+var show_flag = 0;
+var title_default = "";
+
+function change_title(){
+	if(newmsg == true){
+		if(show_flag == 0){
+			$("title").text("新消息 " + title_default);
+			show_flag == 1;
+		}else {
+			$("title").text(title_default);
+			show_flag == 0;
+		}
+		show_count ++;
+		if(show_count > 4){
+			show_count = 0;
+			newmsg = false;
+		}
+	}
+}
 
 function request_msg(){
 	var url = "chatread.php?lastindex=" + lastindex;
@@ -44,7 +66,10 @@ function request_msg(){
 			result += info["user"] + ":" + info["content"];
 			result += "\n\n";
 		});
-		$("#chatwindow").text($("#chatwindow").text() + result);
+		if(result != ""){
+			$("#chatwindow").text($("#chatwindow").text() + result);
+			$("title").text("新消息 " + title_default);
+		}
 		ajustChatWindowsScroll();
 		lastindex = data.lastindex;
 		loading = false;
@@ -58,6 +83,7 @@ function loadmsg(){
 		request_msg();
 	}
 }
+
 
 
 
@@ -81,6 +107,7 @@ $(function(){
 		});
 
 		setInterval("loadmsg()",2000);
+		title_default = $("title").text();
 });
 
 
@@ -119,6 +146,10 @@ $(function(){
 			send();
 		}
 	});
+
+	$("#content").bind('focus',function(event){
+		$("title").text(title_default);
+	});
 });
 
 
@@ -142,13 +173,12 @@ function ajustChatWindowsScroll(){
 <div style="width: 800px; height: 500px"><textarea id="chatwindow"
 	rows="20" cols="50"></textarea> <br />
 
-<textarea rows="3" cols="50" id="content" >
+<textarea rows="3" cols="50" id="content">
 
 </textarea> <br />
 
-<input type="button"
-	name="enter" id="enter" value="提交" /> <input type="button" name="quit"
-	id="quit" value="退出聊天" /> <br />
+<input type="button" name="enter" id="enter" value="提交" /> <input
+	type="button" name="quit" id="quit" value="退出聊天" /> <br />
 <span id="sendresult"> </span></div>
 </div>
 </body>
