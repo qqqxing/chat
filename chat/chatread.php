@@ -34,7 +34,7 @@ if (!isset($_GET['lastindex']) || $_GET['lastindex'] == "") {
 	//read last 20 records
 	$out = new Result();
 	$dbcon = mysql_connect($db_host,$db_user,$db_pw);
-	if (!dbcon){
+	if (!$dbcon){
 		$out->error = 2;
 		print json_encode($out);
 		die();
@@ -77,7 +77,7 @@ if (!isset($_GET['lastindex']) || $_GET['lastindex'] == "") {
 	$lastindex = $_GET['lastindex'];
 	$out = new Result();
 	$dbcon = mysql_connect($db_host,$db_user,$db_pw);
-	if (!dbcon){
+	if (!$dbcon){
 		$out->error = 2;
 		print json_encode($out);
 		die();
