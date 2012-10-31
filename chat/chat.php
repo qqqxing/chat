@@ -32,6 +32,7 @@ if(isset($_COOKIE['lastindex']) && $_COOKIE['lastindex'] != ""){
 
 
 var lastindex = <?php echo $lastindex?>;
+var username = "<?php echo $userid ?>";
 
 var loading = false;
 
@@ -58,6 +59,7 @@ function change_title(){
 }
 
 function request_msg(){
+	var new_msg_coming = false;
 	var url = "chatread.php?lastindex=" + lastindex;
 	$.getJSON(url,function(data){
 		var result = "";
@@ -65,10 +67,15 @@ function request_msg(){
 			result += info["datetime"] + "\n";
 			result += info["user"] + ":" + info["content"];
 			result += "\n\n";
+			if( username != info["user"] ){
+				new_msg_coming = true;
+			}
 		});
 		if(result != ""){
 			$("#chatwindow").text($("#chatwindow").text() + result);
-			$("title").text("新消息 " + title_default);
+			if(new_msg_coming == true){
+				$("title").text("新消息 " + title_default);
+			}
 		}
 		ajustChatWindowsScroll();
 		lastindex = data.lastindex;
