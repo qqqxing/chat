@@ -45,15 +45,10 @@ function change_title(){
 	if(newmsg == true){
 		if(show_flag == 0){
 			$("title").text("新消息 " + title_default);
-			show_flag == 1;
+			show_flag = 1;
 		}else {
 			$("title").text(title_default);
-			show_flag == 0;
-		}
-		show_count ++;
-		if(show_count > 4){
-			show_count = 0;
-			newmsg = false;
+			show_flag = 0;
 		}
 	}
 }
@@ -74,7 +69,8 @@ function request_msg(){
 		if(result != ""){
 			$("#chatwindow").text($("#chatwindow").text() + result);
 			if(new_msg_coming == true){
-				$("title").text("新消息 " + title_default);
+				//$("title").text("新消息 " + title_default);
+				newmsg = true;
 			}
 		}
 		ajustChatWindowsScroll();
@@ -114,6 +110,7 @@ $(function(){
 		});
 
 		setInterval("loadmsg()",2000);
+		setInterval("change_title()",1000);
 		title_default = $("title").text();
 });
 
@@ -155,7 +152,8 @@ $(function(){
 	});
 
 	$("#content").bind('focus',function(event){
-		$("title").text(title_default);
+		//$("title").text(title_default);
+		newmsg = false;
 	});
 });
 
