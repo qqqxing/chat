@@ -50,6 +50,8 @@ function change_title(){
 			$("title").text(title_default);
 			show_flag = 0;
 		}
+	}else{
+		$("title").text(title_default);
 	}
 }
 
